@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+<data>
+    <record id="view_report_cdc_fournisseur_tree" model="ir.ui.view">
+        <field name="name">report.cdc.fournisseur.tree</field>
+        <field name="model">report.cdc.fournisseur</field>
+        <field name="type">tree</field>
+        <field name="arch" type="xml">
+            <tree string="Deliveries Products shipped without specification">
+                <field name="date" invisible="1" />
+                <field name="year" invisible="1"/>
+                <field name="day" invisible="1"/>
+                <field name="month" invisible="1"/>
+                <!--<field name="partner_id" invisible="0"/>-->
+                <field name="product_id" />
+                <field name="nb_deliveries" />
+                <field name="qty_deliveries" />
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_report_cdc_fournisseur_search" model="ir.ui.view">
+        <field name="name">report.cdc.fournisseur.search</field>
+        <field name="model">report.cdc.fournisseur</field>
+        <field name="type">search</field>
+        <field name="arch" type="xml">
+            <search string="Deliveries Products shipped without specification">
+              <group col="10" colspan="12">
+                    <filter icon="terp-go-year" string="  365 Days  "
+                            domain="[('day','&lt;=', time.strftime('%%Y-%%m-%%d')),('day','&gt;',(datetime.date.today()-datetime.timedelta(days=365)).strftime('%%Y-%%m-%%d'))]"
+                            help="Deliveries Products of last 365 days"/>
+                    <filter icon="terp-go-month" string="   30 Days   "
+                            name="month"
+                            domain="[('day','&lt;=', time.strftime('%%Y-%%m-%%d')), ('day','&gt;',(datetime.date.today()-datetime.timedelta(days=30)).strftime('%%Y-%%m-%%d'))]"
+                            help="Deliveries Products of last 30 days"/>
+                    <filter icon="terp-go-week"
+                            string="    7 Days    "
+                            separator="1"
+                            domain="[('day','&lt;=', time.strftime('%%Y-%%m-%%d')), ('day','&gt;',(datetime.date.today()-datetime.timedelta(days=7)).strftime('%%Y-%%m-%%d'))]"
+                            help="Deliveries Products during last 7 days"/>
+                    <separator orientation="vertical"/>
+                    <field name="date" />
+                    <!--<field name="partner_id" />-->
+                    <field name="product_id" />
+                </group>
+                <newline/>
+                <group expand="0" string="Group By...">
+                    <filter string="Supplier" icon="terp-partner" context="{'group_by':'partner_id'}"/>
+                    <separator orientation="vertical"/>
+                    <filter string="Product" icon="terp-accessories-archiver" context="{'group_by':'product_id'}"/>
+                    <separator orientation="vertical" groups="base.group_multi_company"/>
+                    <filter string="Day" icon="terp-go-today" context="{'group_by':'day'}"/>
+                    <filter string="Month" name="Month" icon="terp-go-month" context="{'group_by':'month'}"/>
+                    <filter string="Year" icon="terp-go-year" context="{'group_by':'year'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+    
+    <record id="action_view_report_cdc_fournisseur" model="ir.actions.act_window">
+        <field name="name">Deliveries Products shipped without specification</field>
+        <field name="res_model">report.cdc.fournisseur</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree</field>
+        <field name="context">{'group_by_no_leaf':1,'group_by':['product_id']}</field>
+        <field name="search_view_id" ref="view_report_cdc_fournisseur_search"/>
+    </record>
+
+    <menuitem action="action_view_report_cdc_fournisseur"
+        name="Deliveries Products shipped without specification"
+        id="menu_action_view_report_cdc_fournisseur"
+        parent="menu_is_supplier_specification" sequence="5"/>
+
+</data>
+</openerp>

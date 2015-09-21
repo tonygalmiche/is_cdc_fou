@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <record id="is_cdc_fournisseur_view_tree" model="ir.ui.view">
+            <field name="name">is.cdc.fournisseur.view.tree</field>
+            <field name="model">is.specification</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree colors="grey:state=='archived'"  string="Specifications" >
+                    <field name="type_specification" />
+                    <field name="product_id" />
+                    <field name="partner_id"/>
+                    <field name="num_version" />
+                    <field name="date_application"/>
+                    <field name="date_send"/>
+                    <field name="date_sign_supp"/>
+                    <field name="state" />
+                    <button name="duplicate_specification_line" string="Duplicate Specification" type="object" icon="gtk-go-forward"/>
+                </tree>
+            </field>
+        </record>
+        
+        
+        <record id="is_cdc_fournisseur_view_form" model="ir.ui.view">
+            <field name="name">is.cdc.fournisseur.view.form</field>
+            <field name="model">is.specification</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Specifications">
+                    <group colspan="6" col="7">
+                        <field name="type_specification" />
+                        <!--<field name="product_id" />-->
+                        <field name="product_id" context="sellers_filter=True,partner_id=parent.id" />
+                        <field name="num_version" />
+                        <field name="date_application" />
+                        <field name="date_send"/>
+                        <field name="date_sign_supp" />
+                    </group>
+                    <group col="3" colspan="2">
+                        <field name="comment"  />
+                        <field name="link" />
+                        <field name="partner_id" />
+                        <field name="state"/>
+                    </group>
+                </form>
+            </field>
+        </record>
+
+<!--
+                    <xpath expr="//field[@name='product_id']" position="attributes">
+                        <attribute name="context">sellers_filter=True,partner_id=parent.partner_id,quantity=product_qty,pricelist=parent.pricelist_id,uom=product_uom,warehouse=parent.warehouse_id</attribute>
+                        <attribute name="domain">[('state', 'in', ('draft','sellable'))]</attribute>
+                    </xpath>
+-->
+
+
+       <record id="is_cdc_fournisseur_view_filter" model="ir.ui.view">
+            <field name="name">is.cdc.fournisseur.view.select</field>
+            <field name="model">is.specification</field>
+            <field name="type">search</field>
+            <field name="arch" type="xml">
+                <search string="Search Specifications">
+                <group col='10' colspan='4'>
+                    <filter icon="terp-document-new" name="progress" string="In progress" domain="[('state','=','progress')]" separator="1" />
+                    <filter icon="terp-camera_test" name="sent" string="Sent" domain="[('state','=','sent')]" separator="1" />
+                    <filter icon="terp-check" name="signed" string="Signed" domain="[('state','=','signed')]" separator="1" />
+                    <filter icon="terp-check" name="archived" string="Archived" domain="[('state','=','archived')]" separator="1" />
+                </group>
+                <newline/>
+                <group col='10' colspan='4'>
+                    <filter icon="terp-check" name="spec_product_part1" string="Part 1 General Specifications" domain="[('type_specification','=','spec_product_part1')]" separator="1" />
+                    <filter icon="terp-check" name="spec_product_part2" string="Part 2 Particular Specifications" domain="[('type_specification','=','spec_product_part2')]" separator="1" />
+                    <filter icon="terp-check" name="spec_delivery" string="Specification delivery" domain="[('type_specification','=','spec_delivery')]" separator="1" />
+                    <filter icon="terp-check" name="spec_prod_sheet" string="Product Specification Sheets" domain="[('type_specification','=','spec_prod_sheet')]" separator="1" />
+                    <filter icon="terp-check" name="spec_transp" string="Specification Transport" domain="[('type_specification','=','spec_transp')]" separator="1" />
+                    <filter icon="terp-check" name="spec_consom" string="Specification Consumables" domain="[('type_specification','=','spec_consom')]" separator="1" />
+                    <filter icon="terp-check" name="term_sale" string="Terms of Sales" domain="[('type_specification','=','term_sale')]" separator="1" />
+                </group>
+                <newline/>
+                <group col='10' colspan='4'>
+                    <field name="type_specification" select="1"/>
+                    <field name="product_id" select="1"/>
+                    <field name="partner_id" select="1"/>
+                    <field name="num_version" select="1"/>
+                    <field name="date_application" select="1"/>
+                    <field name="date_send" select="1"/>
+                    <field name="date_sign_supp" select="1"/>
+                    <field name="state" select="1"/>
+                </group>
+                <newline/>
+                  <group expand="0" string="Group By..." colspan="4" col="10" groups="base.group_extended">
+                    <filter string="Type Specification" icon="terp-check" domain="[]" context="{'group_by':'type_specification'}"/>
+                    <separator orientation="vertical"/>
+                    <filter string="Product" icon="terp-check" domain="[]" context="{'group_by':'product_id'}"/>
+                    <separator orientation="vertical"/>
+                    <filter string="State" icon="terp-stock_effects-object-colorize" domain="[]" context="{'group_by':'state'}"/>
+                     <separator orientation="vertical"/>
+                    <filter string="Supplier" icon="terp-partner" domain="[]" context="{'group_by':'partner_id'}"/>
+                </group>
+              </search>
+            </field>
+        </record>
+
+        <record id="is_cdc_fournisseur_view_action" model="ir.actions.act_window">
+            <field name="name">Specifications</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">is.specification</field>
+            <field name="view_mode">tree,form</field>
+            <field name="search_view_id" ref="is_cdc_fournisseur_view_filter"/>
+            <field name="help">Add a new specification</field>
+        </record>
+        
+        <menuitem id="menu_is_supplier_specification" name="Specifications"
+            parent="base.menu_purchase_root" sequence="4"/>
+            
+        <menuitem id="menu_is_cdc_fournisseur_view_action" name="Specifications"
+            parent="menu_is_supplier_specification"
+            action="is_cdc_fournisseur_view_action" sequence="1"/>
+            
+
+    </data>
+</openerp>
