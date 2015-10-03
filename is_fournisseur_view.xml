@@ -2,49 +2,60 @@
 <openerp>
     <data>
 
-         <!--  Partners inherited form -->
+     <!--  Partners inherited form -->
 
-        <record id="view_specification_partner_info_form1" model="ir.ui.view">
-            <field name="name">res.partner.specification.supplier.inherit1</field>
-            <field name="model">res.partner</field>
-            <field name="type">form</field>
-            <field name="inherit_id" ref="base.view_partner_form"/>
-            <field name="arch" type="xml">
-                <page string="History" position="after">
-                    <page string="Specifications" attrs="{'invisible': [('supplier','=',False)]}">
-                        <field name="specification_ids" colspan="4" nolabel="1" >
-                            <tree string="Specifications" colors="grey:state=='archived'">
+    <record id="view_specification_partner_info_form1" model="ir.ui.view">
+        <field name="name">res.partner.specification.supplier.inherit1</field>
+        <field name="model">res.partner</field>
+        <field name="type">form</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+            <page string="History" position="after">
+                <page string="Specifications" attrs="{'invisible': [('supplier','=',False)]}">
+                    <field name="specification_ids" colspan="4" nolabel="1" >
+                        <tree string="Specifications" colors="grey:state=='archived'">
+                            <field name="type_specification" />
+                            <field name="product_id" />
+                            <field name="num_version"  />
+                            <field name="date_application" />
+                            <field name="date_send" />
+                            <field name="date_sign_supp" />
+                            <field name="partner_id" invisible="1" />
+                            <field name="state" />
+                            <button name="duplicate_specification_line" string="Duplicate Specification" type="object" icon="gtk-go-forward"/>
+                        </tree>
+                        <form string="Specifications">
+                            <group colspan="6" col="7">
                                 <field name="type_specification" />
-                                <field name="product_id" />
-                                <field name="num_version"  />
+                                <field name="product_id" context="sellers_filter=True,partner_id=parent.id" />
+                                <field name="num_version" />
                                 <field name="date_application" />
-                                <field name="date_send" />
+                                <field name="date_send"/>
                                 <field name="date_sign_supp" />
-                                <field name="partner_id" invisible="1" />
-                                <field name="state" />
-                                <button name="duplicate_specification_line" string="Duplicate Specification" type="object" icon="gtk-go-forward"/>
-                            </tree>
-                            <form string="Specifications">
-                                <group colspan="6" col="7">
-                                    <field name="type_specification" />
-                                    <field name="product_id" context="sellers_filter=True,partner_id=parent.id" />
-                                    <field name="num_version" />
-                                    <field name="date_application" />
-                                    <field name="date_send"/>
-                                    <field name="date_sign_supp" />
-                                </group>
+                            </group>
 
-                                <group col="3" colspan="2">
-                                    <field name="comment"  />
-                                    <field name="link" widget="url" />
-                                    <field name="partner_id" invisible="1"/>
-                                    <field name="state"/>
-                                </group>
-                            </form>
-                        </field>
-                    </page>
+                            <group col="3" colspan="2">
+                                <field name="comment"  />
+                                <field name="link" widget="url" />
+                                <field name="partner_id" invisible="1"/>
+                                <field name="state"/>
+                            </group>
+                        </form>
+                    </field>
                 </page>
-            </field>
-        </record>
+            </page>
+        </field>
+    </record>
+
+
+    <act_window 
+        domain="[('partner_id', '=', active_id)]"
+        id="act_res_partner_specification" name="Specifications"
+        res_model="is.specification"
+        src_model="res.partner"/>
+
+
+
+
     </data>
 </openerp>

@@ -29,9 +29,14 @@
             <field name="arch" type="xml">
                 <form string="Specifications">
                     <group colspan="6" col="7">
+                        <field name="partner_id" required="1" />
                         <field name="type_specification" />
                         <!--<field name="product_id" />-->
-                        <field name="product_id" context="sellers_filter=True,partner_id=parent.id" />
+                        <!--<field name="product_id" context="sellers_filter=True,partner_id=parent.id" />-->
+
+                        <field name="product_id" context="sellers_filter=True,partner_id=partner_id" />
+
+
                         <field name="num_version" />
                         <field name="date_application" />
                         <field name="date_send"/>
@@ -40,7 +45,6 @@
                     <group col="3" colspan="2">
                         <field name="comment"  />
                         <field name="link" />
-                        <field name="partner_id" />
                         <field name="state"/>
                     </group>
                 </form>
