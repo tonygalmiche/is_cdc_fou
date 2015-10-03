@@ -44,7 +44,7 @@
                     </group>
                     <group col="3" colspan="2">
                         <field name="comment"  />
-                        <field name="link" />
+                        <field name="link" widget="url" />
                         <field name="state"/>
                     </group>
                 </form>
